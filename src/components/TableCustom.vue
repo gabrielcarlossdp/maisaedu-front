@@ -1,12 +1,17 @@
 <template>
-  <v-card class="rounded-lg">
+  <v-card class="rounded-lg" :loading="loading">
     <v-table>
       <thead>
         <tr>
-          <th v-for="head in headers" :key="head.key">
+          <th v-for="head in headers" :key="head.key" class="font-weight-bold">
             {{ head.text }}
           </th>
-          <th class="text-end" v-if="actions || actions.length > 0">Ações</th>
+          <th
+            class="text-end font-weight-bold"
+            v-if="actions || actions.length > 0"
+          >
+            Ações
+          </th>
         </tr>
       </thead>
       <tbody>
@@ -23,6 +28,11 @@
 <script>
 export default {
   props: {
+    loading: {
+      type: Boolean,
+      required: false,
+      default: false,
+    },
     headers: {
       type: Array,
       required: true,

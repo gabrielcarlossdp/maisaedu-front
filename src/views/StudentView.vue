@@ -16,12 +16,17 @@
         ></v-text-field>
       </v-col>
       <v-col cols="auto">
-        <v-btn color="primary">Cadastrar Aluno</v-btn>
+        <v-btn color="primary" to="/student/create">Cadastrar Aluno</v-btn>
       </v-col>
     </v-row>
     <v-row>
       <v-col cols="12">
-        <TableCustom :headers="headers" :itens="itens" actions>
+        <TableCustom
+          :headers="headers"
+          :itens="students"
+          actions
+          :loading="loadingStudents"
+        >
           <template #actions="{ row }">
             <v-row class="justify-end mr-2">
               <v-btn
@@ -64,30 +69,25 @@ import TableCustom from '@/components/TableCustom.vue'
 export default {
   components: { TableCustom },
   data: () => ({
+    loadingStudents: false,
     loaded: false,
     loading: false,
     editedIndex: -1,
     dialogDelete: false,
     editedItem: {
-      academicRecord: '',
+      ra: '',
       name: '',
       cpf: '',
     },
     defaultItem: {
-      academicRecord: '',
+      ra: '',
       name: '',
       cpf: '',
     },
-    itens: [
-      {
-        academicRecord: 123456,
-        name: 'Gabriel Carlos',
-        cpf: 159845168,
-      },
-    ],
+    students: [],
     headers: [
       {
-        key: 'academicRecord',
+        key: 'ra',
         text: 'Matrícula',
       },
       {
@@ -102,8 +102,21 @@ export default {
   }),
 
   methods: {
+    loadStudents() {
+      this.loadingStudents = true
+      this.$axios
+        .get('/student')
+        .then(response => {
+          this.students = response.data
+          this.loadingStudents = false
+        })
+        .catch(errors => {
+          console.log(errors)
+          this.loadingStudents = false
+        })
+    },
     deleteItemConfirm() {
-      this.itens.splice(this.editedIndex, 1)
+      this.students.splice(this.editedIndex, 1)
       this.closeDelete()
     },
     closeDelete() {
@@ -114,12 +127,12 @@ export default {
       })
     },
     editItem(item) {
-      this.editedIndex = this.itens.indexOf(item)
+      this.editedIndex = this.students.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
     },
     deleteItem(item) {
-      this.editedIndex = this.itens.indexOf(item)
+      this.editedIndex = this.students.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
@@ -131,6 +144,9 @@ export default {
         this.loaded = true
       }, 2000)
     },
+  },
+  mounted() {
+    this.loadStudents()
   },
 }
 </script>
