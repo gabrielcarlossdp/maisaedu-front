@@ -15,18 +15,57 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="item in itens" :key="item.name">
-          <td v-for="head in headers" :key="head.key">{{ item[head.key] }}</td>
-          <td v-if="actions || actions.length > 0">
-            <slot name="actions" :row="item"></slot>
-          </td>
-        </tr>
+        <template v-if="itens.length === 0">
+          <tr>
+            <td
+              class="text-center"
+              :colspan="
+                headers.length + (actions || actions.length > 0 ? 1 : 0)
+              "
+            >
+              {{ loading ? 'Carregando...' : 'Nenhum item encontrado' }}
+            </td>
+          </tr>
+        </template>
+        <template v-else>
+          <tr v-for="item in itens" :key="item.name">
+            <td v-for="head in headers" :key="head.key">
+              {{ item[head.key] }}
+            </td>
+            <td v-if="actions || actions.length > 0">
+              <slot name="actions" :row="item"></slot>
+            </td>
+          </tr>
+        </template>
       </tbody>
     </v-table>
   </v-card>
+  <v-row v-if="dataTotalLength > 0" justify="space-between" class="mt-3">
+    <v-col cols="6">
+      <v-select
+        variant="solo"
+        v-model="pageSize"
+        label="Itens por Página"
+        :items="[10, 20, 50, 100]"
+      ></v-select>
+    </v-col>
+    <v-col cols="6">
+      <v-pagination
+        v-if="lastPage > 1"
+        :length="lastPage"
+        v-model="page"
+      ></v-pagination>
+    </v-col>
+  </v-row>
 </template>
 <script>
 export default {
+  name: 'TableCustom',
+  emits: ['page', 'pageSize'],
+  data: () => ({
+    page: 1,
+    pageSize: 10,
+  }),
   props: {
     loading: {
       type: Boolean,
@@ -47,6 +86,29 @@ export default {
       type: [Boolean, Array],
       required: false,
       default: false,
+    },
+    dataTotalLength: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+    lastPage: {
+      type: Number,
+      required: false,
+      default: 0,
+    },
+  },
+  watch: {
+    page() {
+      this.$emit('page', this.page)
+    },
+    pageSize() {
+      this.$emit('pageSize', this.pageSize)
+    },
+  },
+  methods: {
+    clearPage() {
+      this.page = 1
     },
   },
 }

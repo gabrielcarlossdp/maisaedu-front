@@ -10,8 +10,9 @@
           variant="solo"
           hide-details
           single-line
-          @click:append-inner="onClick"
+          @click:append-inner="loadStudents()"
           flat
+          v-model="filter.search"
           class="border rounded"
         ></v-text-field>
       </v-col>
@@ -26,6 +27,10 @@
           :itens="students"
           actions
           :loading="loadingStudents"
+          :dataTotalLength="dataTotalLength"
+          :lastPage="lastPage"
+          @page="filter.page = $event"
+          @pageSize="filter.pageSize = $event"
         >
           <template #actions="{ row }">
             <v-row class="justify-end mr-2">
@@ -65,25 +70,24 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
-    <v-snackbar v-model="snackbar" variant="tonal" color="success">
-      {{ text }}
-
-      <template v-slot:actions>
-        <v-btn variant="text" @click="snackbar = false"> Fechar </v-btn>
-      </template>
-    </v-snackbar>
   </div>
 </template>
 
 <script>
 import TableCustom from '@/components/TableCustom.vue'
+import { useSnackbarStore } from '@/stores/snackbar'
 export default {
   name: 'StudentView',
   components: { TableCustom },
   data: () => ({
-    snackbar: false,
-    text: '',
+    filter: {
+      search: '',
+      pageSize: 10,
+      page: 1,
+      filter: {},
+    },
+    dataTotalLength: 0,
+    lastPage: 0,
     loadingStudents: false,
     loadingStudentDelete: false,
     loaded: false,
@@ -117,13 +121,41 @@ export default {
     ],
   }),
 
+  computed: {
+    queryFilter() {
+      let fil = Object.keys(this.filter.filter)
+        .map(item => {
+          return this.filter.filter[item]
+            ? `filter[${item}]=${this.filter.filter[item]}&`
+            : ''
+        })
+        .join('')
+
+      let ter = {
+        ...(this.filter.search ? { search: this.filter.search } : {}),
+        ...(this.filter.pageSize ? { pageSize: this.filter.pageSize } : {}),
+        ...(this.filter.page ? { page: this.filter.page } : {}),
+        ...(this.filter.sortBy ? { sortBy: this.filter.sortBy } : {}),
+        ...(this.filter.sortOrder ? { sortOrder: this.filter.sortOrder } : {}),
+      }
+      return fil + new URLSearchParams(ter).toString()
+    },
+  },
+
   methods: {
     loadStudents() {
       this.loadingStudents = true
       this.$axios
-        .get('/student')
+        .get('/student?' + this.queryFilter)
         .then(response => {
-          this.students = response.data
+          this.students = response.data.data
+
+          if (response.data.meta) {
+            this.dataTotalLength = response.data.meta.total
+            this.lastPage = response.data.meta.last_page
+            this.filter.page = response.data.meta.current_page
+            this.filter.pageSize = response.data.meta.per_page
+          }
           this.loadingStudents = false
         })
         .catch(errors => {
@@ -136,8 +168,11 @@ export default {
       this.$axios
         .delete(`/student/${this.editedItem.id}`)
         .then(() => {
-          this.text = 'Aluno excluído com sucesso!'
-          this.snackbar = true
+          useSnackbarStore().showSnackbar({
+            text: 'Aluno excluído com sucesso!',
+            color: 'success',
+          })
+
           this.loadingStudentDelete = false
           this.loadStudents()
         })
@@ -165,17 +200,17 @@ export default {
       this.editedItem = Object.assign({}, item)
       this.dialogDelete = true
     },
-    onClick() {
-      this.loading = true
-
-      setTimeout(() => {
-        this.loading = false
-        this.loaded = true
-      }, 2000)
-    },
   },
   mounted() {
     this.loadStudents()
+  },
+  watch: {
+    filter: {
+      handler() {
+        this.loadStudents()
+      },
+      deep: true,
+    },
   },
 }
 </script>
