@@ -54,13 +54,25 @@
           <v-btn color="blue-darken-1" variant="text" @click="closeDelete"
             >Cancelar</v-btn
           >
-          <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm"
+          <v-btn
+            :loading="loadingStudentDelete"
+            color="blue-darken-1"
+            variant="text"
+            @click="deleteItemConfirm"
             >Sim</v-btn
           >
           <v-spacer></v-spacer>
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-snackbar v-model="snackbar" variant="tonal" color="success">
+      {{ text }}
+
+      <template v-slot:actions>
+        <v-btn variant="text" @click="snackbar = false"> Fechar </v-btn>
+      </template>
+    </v-snackbar>
   </div>
 </template>
 
@@ -69,7 +81,10 @@ import TableCustom from '@/components/TableCustom.vue'
 export default {
   components: { TableCustom },
   data: () => ({
+    snackbar: false,
+    text: '',
     loadingStudents: false,
+    loadingStudentDelete: false,
     loaded: false,
     loading: false,
     editedIndex: -1,
@@ -116,7 +131,20 @@ export default {
         })
     },
     deleteItemConfirm() {
-      this.students.splice(this.editedIndex, 1)
+      this.loadingStudentDelete = true
+      this.$axios
+        .delete(`/student/${this.editedItem.id}`)
+        .then(() => {
+          this.text = 'Aluno excluído com sucesso!'
+          this.snackbar = true
+          this.loadingStudentDelete = false
+          this.loadStudents()
+        })
+        .catch(errors => {
+          console.log(errors)
+          this.loadingStudentDelete = false
+        })
+
       this.closeDelete()
     },
     closeDelete() {
