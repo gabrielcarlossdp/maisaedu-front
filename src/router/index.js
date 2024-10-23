@@ -21,6 +21,12 @@ const router = createRouter({
       name: 'create-student',
       component: CreateStudentView,
     },
+    {
+      path: '/student/:id',
+      name: 'edit-student',
+      component: CreateStudentView,
+      props: true,
+    },
   ],
 })
 

@@ -24,12 +24,19 @@
         <router-view></router-view>
       </v-container>
     </v-main>
+
+    <snackbar-custom></snackbar-custom>
   </v-app>
 </template>
 
 <script>
 import { useAppStore } from '@/stores/app'
+import SnackbarCustom from '@/components/SnackbarCustom.vue'
+
 export default {
+  components: {
+    SnackbarCustom: SnackbarCustom,
+  },
   data: () => ({
     drawer: true,
   }),

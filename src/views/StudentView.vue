@@ -33,7 +33,7 @@
                 size="small"
                 color="warning"
                 class="mr-2"
-                @click="editItem(row)"
+                :to="`/student/${row.id}`"
                 >Editar</v-btn
               >
               <v-btn size="small" color="error" @click="deleteItem(row)"
@@ -79,6 +79,7 @@
 <script>
 import TableCustom from '@/components/TableCustom.vue'
 export default {
+  name: 'StudentView',
   components: { TableCustom },
   data: () => ({
     snackbar: false,
