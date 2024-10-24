@@ -40,16 +40,18 @@
       </tbody>
     </v-table>
   </v-card>
-  <v-row v-if="dataTotalLength > 0" justify="space-between" class="mt-3">
-    <v-col cols="6">
+  <v-row v-if="dataTotalLength > 1" justify="space-between" class="mt-3">
+    <v-col cols="auto">
       <v-select
+        class="rounded-lg"
         variant="solo"
         v-model="pageSize"
-        label="Itens por Página"
+        label="Itens"
         :items="[10, 20, 50, 100]"
       ></v-select>
+      <v-tooltip activator="parent" location="end">Itens por Página</v-tooltip>
     </v-col>
-    <v-col cols="6">
+    <v-col>
       <v-pagination
         v-if="lastPage > 1"
         :length="lastPage"

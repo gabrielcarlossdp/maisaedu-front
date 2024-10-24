@@ -11,20 +11,20 @@ export default createVuetify({
   components,
   directives,
   theme: {
-    defaultTheme: 'dark',
+    defaultTheme: 'light',
     themes: {
       light: {
         colors: {
-          primary: '#1867C0',
-          secondary: '#5CBBF6',
+          primary: '#DB203B',
+          secondary: '#00ABB5',
           greybg: '#F5F5F5',
         },
       },
       dark: {
         dark: true,
         colors: {
-          primary: '#1867C0',
-          secondary: '#5CBBF6',
+          primary: '#DB203B',
+          secondary: '#00ABB5',
           greybg: '#181818',
         },
       },

@@ -17,7 +17,9 @@
         ></v-text-field>
       </v-col>
       <v-col cols="auto">
-        <v-btn color="primary" to="/student/create">Cadastrar Aluno</v-btn>
+        <v-btn color="primary" to="/student/create">
+          <v-icon icon="mdi-plus"></v-icon> Cadastrar Aluno</v-btn
+        >
       </v-col>
     </v-row>
     <v-row>
@@ -33,17 +35,25 @@
           @pageSize="filter.pageSize = $event"
         >
           <template #actions="{ row }">
-            <v-row class="justify-end mr-2">
+            <v-row class="mr-2 d-flex" justify="end" style="min-width: 100px">
               <v-btn
-                size="small"
+                icon="mdi-pencil"
+                density="compact"
+                variant="text"
                 color="warning"
-                class="mr-2"
+                class="mr-sm-0 mr-md-2"
                 :to="`/student/${row.id}`"
-                >Editar</v-btn
+              ></v-btn>
+
+              <v-btn
+                icon="mdi-delete"
+                class="d-flex"
+                variant="text"
+                density="compact"
+                color="error"
+                @click="deleteItem(row)"
               >
-              <v-btn size="small" color="error" @click="deleteItem(row)"
-                >Excluir</v-btn
-              >
+              </v-btn>
             </v-row>
           </template>
         </TableCustom>
@@ -191,6 +201,7 @@ export default {
       })
     },
     editItem(item) {
+      console.log(item)
       this.editedIndex = this.students.indexOf(item)
       this.editedItem = Object.assign({}, item)
       this.dialog = true
