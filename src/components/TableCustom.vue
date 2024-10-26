@@ -5,6 +5,17 @@
         <tr>
           <th v-for="head in headers" :key="head.key" class="font-weight-bold">
             {{ head.text }}
+            <v-btn
+              v-if="head.sortable"
+              class="ml-1"
+              :icon="iconSort(head)"
+              variant="text"
+              density="compact"
+              size="x-small"
+              :color="colorSort(head)"
+              @click="sortBy(head)"
+            >
+            </v-btn>
           </th>
           <th
             class="text-end font-weight-bold"
@@ -63,10 +74,14 @@
 <script>
 export default {
   name: 'TableCustom',
-  emits: ['page', 'pageSize'],
+  emits: ['page', 'pageSize', 'sortBy', 'sortOrder'],
   data: () => ({
     page: 1,
     pageSize: 10,
+    sort: {
+      sortBy: 'name',
+      sortOrder: 'asc',
+    },
   }),
   props: {
     loading: {
@@ -109,6 +124,26 @@ export default {
     },
   },
   methods: {
+    iconSort(head) {
+      if (this.sort.sortBy === head.key) {
+        return this.sort.sortOrder === 'asc'
+          ? 'mdi-sort-ascending'
+          : 'mdi-sort-descending'
+      }
+      return 'mdi-sort'
+    },
+    colorSort(head) {
+      if (this.sort.sortBy === head.key) {
+        return 'primary'
+      }
+      return 'grey'
+    },
+    sortBy(head) {
+      this.sort.sortBy = head.key
+      this.sort.sortOrder = this.sort.sortOrder === 'asc' ? 'desc' : 'asc'
+      this.$emit('sortBy', this.sort.sortBy)
+      this.$emit('sortOrder', this.sort.sortOrder)
+    },
     clearPage() {
       this.page = 1
     },
