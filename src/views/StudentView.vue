@@ -33,6 +33,8 @@
           :lastPage="lastPage"
           @page="filter.page = $event"
           @pageSize="filter.pageSize = $event"
+          @sortBy="filter.sortBy = $event"
+          @sortOrder="filter.sortOrder = $event"
         >
           <template #actions="{ row }">
             <v-row class="mr-2 d-flex" justify="end" style="min-width: 100px">
@@ -94,6 +96,8 @@ export default {
       search: '',
       pageSize: 10,
       page: 1,
+      sortBy: 'name',
+      sortOrder: 'asc',
       filter: {},
     },
     dataTotalLength: 0,
@@ -119,14 +123,22 @@ export default {
       {
         key: 'ra',
         text: 'Matrícula',
+        sortable: true,
       },
       {
         key: 'name',
         text: 'Nome',
+        sortable: true,
+      },
+      {
+        key: 'email',
+        text: 'E-mail',
+        sortable: true,
       },
       {
         key: 'cpf',
         text: 'CPF',
+        sortable: true,
       },
     ],
   }),
