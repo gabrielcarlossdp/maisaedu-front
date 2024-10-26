@@ -20,6 +20,11 @@
         title="Alunos"
         :to="'/student'"
       ></v-list-item>
+      <v-list-item
+        prepend-icon="mdi-school"
+        title="Turmas"
+        :to="'/team'"
+      ></v-list-item>
     </v-navigation-drawer>
 
     <v-app-bar
