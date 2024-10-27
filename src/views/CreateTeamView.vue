@@ -1,60 +1,70 @@
 <template>
-  <v-card
-    class="pa-4 rounded-lg"
-    :loading="loading"
-    :title="this.$route.params.id ? 'Editar Turma' : 'Cadastrar Turma'"
-  >
-    <v-form @submit.prevent="onSubmit" v-model="form" :loading="loading">
-      <v-text-field
-        :error-messages="errors.name"
-        class="mt-2"
-        variant="solo-filled"
-        v-model="name"
-        placeholder="Informe o nome completo"
-        :rules="rulesRequired"
-        label="Nome"
-        required
-        @input="clearErrors('name')"
-      ></v-text-field>
+  <div>
+    <v-card
+      class="pa-4 rounded-lg"
+      :loading="loading"
+      :title="this.$route.params.id ? 'Editar Turma' : 'Cadastrar Turma'"
+    >
+      <v-form @submit.prevent="onSubmit" v-model="form" :loading="loading">
+        <v-text-field
+          :error-messages="errors.name"
+          class="mt-2"
+          variant="solo-filled"
+          v-model="name"
+          placeholder="Informe o nome completo"
+          :rules="rulesRequired"
+          label="Nome"
+          required
+          @input="clearErrors('name')"
+        ></v-text-field>
 
-      <v-text-field
-        :error-messages="errors.description"
-        class="mt-2"
-        type="text"
-        variant="solo-filled"
-        v-model="description"
-        placeholder="Informe a descrição da turma"
-        :rules="rulesRequired"
-        label="Descricão"
-        required
-        @input="clearErrors('description')"
-      ></v-text-field>
+        <v-text-field
+          :error-messages="errors.description"
+          class="mt-2"
+          type="text"
+          variant="solo-filled"
+          v-model="description"
+          placeholder="Informe a descrição da turma"
+          :rules="rulesRequired"
+          label="Descricão"
+          required
+          @input="clearErrors('description')"
+        ></v-text-field>
 
-      <v-row>
-        <v-col cols="12" class="d-block d-md-flex justify-end">
-          <v-btn
-            :disabled="!form"
-            :loading="loading"
-            color="primary"
-            class="mt-2 w-100 w-md-25"
-            type="submit"
-            >{{ this.$route.params.id ? 'Editar' : 'Cadastrar' }}</v-btn
-          >
-          <v-btn color="default" class="mt-2 w-100 w-md-25 ml-md-2" to="/team"
-            >Cancelar</v-btn
-          >
-        </v-col>
-      </v-row>
-    </v-form>
-  </v-card>
+        <v-row>
+          <v-col cols="12" class="d-block d-md-flex justify-end">
+            <v-btn
+              :disabled="!form"
+              :loading="loading"
+              color="primary"
+              class="mt-2 w-100 w-md-25"
+              type="submit"
+              >{{ this.$route.params.id ? 'Salvar' : 'Cadastrar' }}</v-btn
+            >
+            <v-btn color="default" class="mt-2 w-100 w-md-25 ml-md-2" to="/team"
+              >Cancelar</v-btn
+            >
+          </v-col>
+        </v-row>
+      </v-form>
+    </v-card>
+    <associations-team
+      :teamId="this.$route.params.id"
+      v-if="this.$route.params.id"
+    />
+  </div>
 </template>
 <script>
 import { mask } from 'vue-the-mask'
 import { useSnackbarStore } from '@/stores/snackbar'
+import AssociationsTeam from '@/components/AssociationsTeam.vue'
 export default {
   name: 'CreateTeamView',
   directives: { mask },
   props: ['id'],
+  components: {
+    AssociationsTeam,
+  },
   data() {
     return {
       snackbar: false,
@@ -62,6 +72,7 @@ export default {
       form: false,
       loading: false,
       name: '',
+      students: [],
       description: '',
       rulesRequired: [v => !!v || 'O campo é obrigatório'],
       errors: [],
@@ -134,6 +145,7 @@ export default {
           this.loading = false
           this.name = response.data.name
           this.description = response.data.description
+          this.students = response.data.students
         })
         .catch(() => {
           this.loading = false
