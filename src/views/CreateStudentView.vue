@@ -66,7 +66,7 @@
             color="primary"
             class="mt-2 w-100 w-md-25"
             type="submit"
-            >{{ this.$route.params.id ? 'Editar' : 'Cadastrar' }}</v-btn
+            >{{ this.$route.params.id ? 'Salvar' : 'Cadastrar' }}</v-btn
           >
           <v-btn
             color="default"

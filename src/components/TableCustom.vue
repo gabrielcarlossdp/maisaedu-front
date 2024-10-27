@@ -1,6 +1,6 @@
 <template>
   <v-card class="rounded-lg" :loading="loading">
-    <v-table>
+    <v-table :height="height">
       <thead>
         <tr>
           <th v-for="head in headers" :key="head.key" class="font-weight-bold">
@@ -84,6 +84,11 @@ export default {
     },
   }),
   props: {
+    height: {
+      type: String,
+      required: false,
+      default: 'auto',
+    },
     loading: {
       type: Boolean,
       required: false,
