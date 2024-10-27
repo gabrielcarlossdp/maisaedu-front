@@ -5,6 +5,8 @@ import LoginView from '@/views/LoginView.vue'
 import RegisterView from '@/views/RegisterView.vue'
 import Layout from '@/layout/DefaultLayout.vue'
 import { useUserStore } from '@/stores/user'
+import TeamView from '@/views/TeamView.vue'
+import CreateTeamView from '@/views/CreateTeamView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,6 +41,22 @@ const router = createRouter({
           path: '/student/:id',
           name: 'edit-student',
           component: CreateStudentView,
+          props: true,
+        },
+        {
+          path: '/team',
+          name: 'team',
+          component: TeamView,
+        },
+        {
+          path: '/team/create',
+          name: 'create-team',
+          component: CreateTeamView,
+        },
+        {
+          path: '/team/:id',
+          name: 'edit-team',
+          component: CreateTeamView,
           props: true,
         },
       ],

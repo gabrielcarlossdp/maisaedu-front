@@ -19,14 +19,17 @@
         prepend-icon="mdi-account-multiple"
         title="Alunos"
         :to="'/student'"
+        @click="title = 'Consulta de Alunos'"
+      ></v-list-item>
+      <v-list-item
+        prepend-icon="mdi-school"
+        title="Turmas"
+        :to="'/team'"
+        @click="title = 'Consulta de Turmas'"
       ></v-list-item>
     </v-navigation-drawer>
 
-    <v-app-bar
-      title="Consulta de Alunos"
-      :elevation="0"
-      class="border-b bg-greybg"
-    >
+    <v-app-bar :title="title" :elevation="0" class="border-b bg-greybg">
       <template v-slot:prepend>
         <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
       </template>
@@ -57,6 +60,7 @@ export default {
   },
   data: () => ({
     drawer: false,
+    title: 'Sistema de gestão escolar',
   }),
   computed: {
     name() {

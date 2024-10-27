@@ -17,6 +17,21 @@ axiosInstance.interceptors.request.use(
   },
 )
 
+axiosInstance.interceptors.response.use(
+  function (response) {
+    return response
+  },
+  function (error) {
+    const access_token = localStorage.getItem('user')
+    if (error.response.status === 401 && access_token) {
+      localStorage.removeItem('user')
+      window.location.reload()
+    }
+
+    return Promise.reject(error)
+  },
+)
+
 export default {
   install(app) {
     app.config.globalProperties.$axios = axiosInstance
