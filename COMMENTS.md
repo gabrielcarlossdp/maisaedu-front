@@ -6,6 +6,9 @@ Esta aplicação frontend foi desenvolvida utilizando o framework Vue.js em conj
 
 Endereço da aplicação = https://maisaedu.netlify.app
 
+- Usuario teste: admin@edtech.com
+- Senha: admin123
+
 ### Arquitetura
 
 - **Vue Router:** Responsável por gerenciar as rotas da aplicação, controlando o acesso às diferentes páginas e definindo os links.
@@ -14,6 +17,8 @@ Endereço da aplicação = https://maisaedu.netlify.app
   - **Register:** Tela de cadastro de novos usuários.
   - **StudentView:** Lista paginada de alunos com funcionalidades de busca e cadastro.
   - **CreateStudentView:** Formulário para cadastro ou edição de alunos.
+  - **TeamView:** Lista paginada de turmas com funcionalidades de busca e cadastro.
+  - **CreateTeamView:** Formulário para cadastro, edição ou associação de alunos da turma.
 - **Components:**
   - **Tabela:** Componente reutilizável para exibir listas paginadas de dados.
   - **SnackBar:** Componente para exibir mensagens de sucesso ou erro.

@@ -59,7 +59,7 @@ export default {
     SnackbarCustom: SnackbarCustom,
   },
   data: () => ({
-    drawer: false,
+    drawer: true,
     title: 'Sistema de gestão escolar',
   }),
   computed: {
