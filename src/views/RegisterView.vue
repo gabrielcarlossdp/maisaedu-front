@@ -1,10 +1,6 @@
 <template>
   <div>
-    <v-img
-      class="mx-auto my-6 mt-12"
-      max-width="100"
-      src="../logo-mais-a-educacao.svg"
-    ></v-img>
+    <v-img class="mx-auto my-6 mt-12" max-width="100" src="../logo.png"></v-img>
 
     <v-card
       class="mx-auto pa-12 pb-8"
